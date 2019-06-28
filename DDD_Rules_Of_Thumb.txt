@@ -1,0 +1,1 @@
+1. DO NOT use Repository from inside Aggregates.
