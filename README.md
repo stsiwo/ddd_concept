@@ -1,6 +1,6 @@
 # DDD and Design Patterns
 
-# DDD overview
+## DDD overview
 
   - why use this?
     - to organize concerns (app, business, ui logic) into its corresponding layer
@@ -431,3 +431,8 @@
       - **better to stick this way if you are using C# & EF**.
   
 
+## Deisgn Patterns
+
+### ActiveRecord
+
+add database logic and domain logic in the active record class. don't use it. 
