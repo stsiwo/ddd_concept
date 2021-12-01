@@ -187,12 +187,13 @@
   - whether it is value object or not depends on the business logic.
     - For example, an address in an e-commerce application might not have an identity at all, since it might only represent a group of attributes of the customer's profile for a person or company. In this case, the address should be classified as a value object. However, in an application for an electric power utility company, the customer address could be important for the business domain. Therefore, the address must have an identity so the billing system can be directly linked to the address. In that case, an address should be classified as a domain entity.
 
-## Aggregate instance
+## Aggregates
 
   def) a cluster of domain objects that can be treated as a single unit.
+     - is designed based on its invariants.
      - a set of Entities
      - a transactional boundary, so entities that need to be transactionally consistent are what forms an aggregate. Thinking about transaction operations is probably the best way to identify aggregates. 
-     - represents entities to fulfill responsibilities of an area of functionality (ordering, cataloging, inventory)
+     - represents a logical group of entities/value objects to fulfill responsibilities of an area of functionality (ordering, cataloging, inventory)
   ex)
     an order and its line-items.
       - there are two separate objects but it could be useful if treat it as a single unit.
@@ -207,7 +208,10 @@
 
   - ideally, it consists of one entity and multiple value objects
 
-  - only a single aggregate should be modified in a single transaction
+  - **only a single aggregate should be modified in a single transaction**. 
+    
+    - this is because an Aggregate is synonymous for transactional consistency boundary, which means that it represents a boundary of a transaction consistency. esp, an Aggregate is designed based on its invariants (e.g., business rule that must be always consistent). so in order to keep the invariants, we use a transaction on the aggregate. this implys that you don't need to update multiple aggregates in a single transaction. 
+
     - if you need to modify multiple aggregate at a single request. use event system and handle another transaction for the other aggregate.
 
   - communication btw Aggregates
@@ -226,9 +230,9 @@
     a single functnality of your system, such as ordering, inventory, catelog)
 
   issue)
-    - should i use a transaction per BC 
-      - as DDD principle, use a transaction per Aggregate, but you may use a transaction per request.
-
+    - should i use a transaction per BC??
+  ans)
+   - No. it should be per Aggregate. this is because an aggregate is a synonym of transcational consistency boundary, which means that a aggregate represents a doundary of transaction consistency. why? an Aggregate is designed based on its invariants (e.g., business rule that must be always consistent). so, in order to keep the invariants, we need to use a transaction to avoid the invariants from breaking. see [Aggregates](#aggregates) for more detail or textbook (Implemneting Domain Driven Design) page 354.
 
 ## Transactional consistency
 
@@ -293,7 +297,7 @@
 
         - putting everything inside service class causes tight coupling and make us hard to maintain, but if you use domain event approach, you can encapsulate each logic into an event handler and make a connection with a domain event in the decoupled way. 
 
-        - only one aggregate should be updated in a single transaction. why?
+        - only one aggregate should be updated in a single transaction. why? (see [Aggregates Section](#aggregates) for the answer)
 
       - event handlers:
 
