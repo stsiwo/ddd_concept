@@ -329,6 +329,18 @@
 
             => should every property is 'read-only'
 
+        - async or sync:
+        
+          - async: the most standard way to implement eventual consistency.
+          
+            - scalable.
+            - hard & complicated
+            
+          - sync:
+          
+            - immediate effect.
+            - not scalable since you need to wait for all of event handlers complete its task (e.g., might be a long request handling).
+
 
   ### how to raise an event 
 
