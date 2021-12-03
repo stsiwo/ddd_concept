@@ -270,9 +270,9 @@
 
 ## Unit of Work (UoW)
 
-  - run a transaction based on a logical group of more than one Aggregates 
+  - run a transaction based on a logical group of more than one Aggregates.
 
-  - used when you need eventual consistency
+  - if you follow the rigit DDD, you don't need to use this pattern since an aggregate per transaction, and if you need to communicate with different Aggregates/BCs you need to use eventual consitency (e.g., Saga/Event Sourcing).
 
   - merge multipel opeartions of database into a single batch to improve teh performance.
 
@@ -453,9 +453,8 @@
 
       - **better to stick this way if you are using C# & EF**.
   
+## Issues
 
-## Deisgn Patterns
+### Do I need to follow 'an aggregate per transaction' rule?
 
-### ActiveRecord
-
-add database logic and domain logic in the active record class. don't use it. 
+if you want to implement DDD properly, you should follow this, and you need to use eventual consistency if you need to communicate with different Aggregates/BCs. But, if you use a single database and the commicating with different Aggregate, it is ok to use multiple aggregate per transaction. Microsoft DDD documentation also breaking this rule when communicating with different aggregate.
