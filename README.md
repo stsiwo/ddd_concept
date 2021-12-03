@@ -1,5 +1,9 @@
 # DDD and Design Patterns
 
+## IMPORTANT NOTE
+
+- don't only focus on strategies (e.g., design patterns, detailed implementation). the most imporant part of DDD is the design phase (e.g., Bounded Context, Aggregate, Entity, and so on). if you wrongly design your domain, your system messes up and even if you use the strategies, you are not following the DDD properly.
+
 ## DDD overview
 
   - why use this?
@@ -240,19 +244,19 @@
 
 ## Eventual consistency: 
 
-  - use mulitple transacation to keep consistency of persistent storages by a request
-  
+  - use a series of transactions to span multiple database. 
+  - often used in microservice architecture.
+  - Martin Fowler recommends to use this eventual consistency when communicating different aggregate or BC. but I think it is bit much since it make our project complicated.
+  - need to use techinques like Saga or Event Sourcing (but 2PC is not option because of bad performance).
+  - in real-life project, you might wonder if you should use thsi eventual consistency if you use a single database and have mutliple aggregates/BCs since you can enclose the communication with different aggregates/BCs in a single transaction. in this case, it might avoid using this eventual consitency in favor of simplicity and easiness. this implies that you need to break the rule of "one aggregate per transaction". you can modify multiple aggregate in a single transaction. it is optional if you use domain events or not. 
 
 ## Repositories
 
   purpose) decouple application and persistence so hide all implementation detail of persistence layer like Data Entities
 
-    - encapsulate teh logic required to access data sources. decouple the infrastructure to access databases from the domain model layer.
-
-    - only channel for update the database.
-
+- encapsulate teh logic required to access data sources. decouple the infrastructure to access databases from the domain model layer.
+- only channel for update the database.
       - a repository per aggregate. this is because an aggregate controls teh transactional consistency. 
-
       - in the case of query (not modification of database), you can create another channel such as CQRS.  
 
     - repositories allow you to populate data in memory that comes from the database in the form of the domain entities. Once the entities are in memory, they can be changed and then persisted back to the database through transactions.
@@ -260,6 +264,9 @@
     -  IMPORTANT: It's important to emphasize again that you should only define one repository for each aggregate root. To achieve the goal of the aggregate root to maintain transactional consistency between all the objects within the aggregate, you should never create a repository for each table in the database. 
 
     - repositories shouldn't be mandatory.
+      - use repositories if you use aggregates/domain models (e.g., to keep the invarints, transactional consistency, you use this repository to make sure there is no inconsistency). otherwise, you can use DAO instead.
+
+    - if you don't use ORM, you might need to use repository with Data Mapper design pattern
 
 ## Unit of Work (UoW)
 
