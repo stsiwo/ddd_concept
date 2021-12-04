@@ -225,8 +225,24 @@
       - e.g., ***calling an aggregate function inside another aggregate.***
 
       - e.g., NEVER EVER do update an aggreagate from another aggregate.
+  - 
 
-    - 
+### How to Design Aggregates
+
+the most important thing when designing aggregates is invariants (e.g., business rules that must be always consistent). analyze invariants then disign your aggregates. this also means that an aggregates should be modified in a single transaction to keep the invraiants valid.
+
+here are 4 tips when designing aggregates
+
+1. ss
+2. **design small aggregates**: 
+  - **concurrency issue**: this is because if you design your aggregates larger (e.g., include a lot of entities and value objects), it is likely that some requests are failed because others won for handling the request concurrently. in details, database might need to lock a lot of records if the aggregate is large. 
+  - **memory usage**: need a lot of memory since your aggregate in-memory object is large. 
+
+3. **reference by id only**: to reference to another aggregate use id (not reference object)
+
+  - **memory usage**: can avoid increasing a lot of in-memory aggregate object.
+  - **aggregate per transaction**: referencing by id only help to keep the rule since it does not refer to another aggregate directly.
+
 
 ## Boundary Context (BC)
 
